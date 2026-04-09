@@ -1,5 +1,7 @@
 import userModel from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import blackListTokenModel from '../models/blacklist.model.js';
 
 //register user controller
 async function registerUserController(req, res) {
@@ -68,5 +70,16 @@ async function loginUserController(req, res) {
     return res.status(200).json({ message: "User logged in successfully", user: { id: isUserAlreadyExist._id, username: isUserAlreadyExist.username, email: isUserAlreadyExist.email } })
 }
 
+//logout user controller
+async function logoutUserController(req, res) {
+    const token = req.cookies.token
+    if (!token) {
+        return res.status(400).json({ message: "User not logged in" })
+    }
+    const blackListToken = await blackListTokenModel.create({ token })
+    res.clearCookie("token")
+    return res.status(200).json({ message: "User logged out successfully" })
+}
 
-export default { registerUserController, loginUserController }
+
+export default { registerUserController, loginUserController, logoutUserController }
