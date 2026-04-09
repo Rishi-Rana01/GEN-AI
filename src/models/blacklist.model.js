@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 const blackListTokenSchema = new mongoose.Schema({
     token: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        index: true
     }
 }, { timestamps: true })
 

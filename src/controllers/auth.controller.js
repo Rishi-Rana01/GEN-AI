@@ -76,10 +76,14 @@ async function logoutUserController(req, res) {
     if (!token) {
         return res.status(400).json({ message: "User not logged in" })
     }
-    const blackListToken = await blackListTokenModel.create({ token })
-    res.clearCookie("token")
-    return res.status(200).json({ message: "User logged out successfully" })
+    try {
+        await blackListTokenModel.create({ token })
+        res.clearCookie("token")
+        return res.status(200).json({ message: "User logged out successfully" })
+    } catch (error) {
+        console.error("Logout error:", error)
+        return res.status(500).json({ message: "Failed to logout" })
+    }
 }
-
 
 export default { registerUserController, loginUserController, logoutUserController }
