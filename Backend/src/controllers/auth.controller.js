@@ -11,7 +11,7 @@ async function registerUserController(req, res) {
         return res.status(400).json({ message: "All fields are required" })
     }
 
-    isUserAlreadyExist = await userModel.findOne({
+    const isUserAlreadyExist = await userModel.findOne({
         $or: [
             { username },
             { email }
@@ -100,4 +100,4 @@ async function getMeController(req, res) {
     }
 }
 
-export default authController = { registerUserController, loginUserController, logoutUserController, getMeController }    
+export default  { registerUserController, loginUserController, logoutUserController, getMeController }    
