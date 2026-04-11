@@ -86,4 +86,18 @@ async function logoutUserController(req, res) {
     }
 }
 
-export default { registerUserController, loginUserController, logoutUserController }
+//get me controller
+async function getMeController(req, res) {
+    const user = await userModel.findById(req.user.id)
+    if (!user) {
+        return res.status(400).json({ message: "User not logged in" })
+    }
+    try {
+       res.status(200).json({ message: "User found successfully", user: { id: user._id, username: user.username, email: user.email } })
+    } catch (error) {
+        console.error("Get me error:", error)
+        return res.status(500).json({ message: "Failed to get user" })
+    }
+}
+
+export default authController = { registerUserController, loginUserController, logoutUserController, getMeController }    
