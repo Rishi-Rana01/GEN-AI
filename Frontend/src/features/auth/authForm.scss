@@ -54,3 +54,23 @@ form{
 .primary-button:hover{
     background-color: #ce0c36;
 }
+
+a{
+    text-decoration: none;
+    color: #e92c55;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+p{
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+h1{
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+}
