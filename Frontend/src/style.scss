@@ -1,3 +1,4 @@
+@use "./styles/button";
 *{
     margin: 0%;
     padding: 0%;
@@ -10,4 +11,5 @@ body,
     
     width: 100;
     background-color:rgb(34, 32, 32);
+    color: white;
 }
