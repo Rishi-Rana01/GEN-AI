@@ -1,4 +1,5 @@
-import { createContext , useState } from "react";
+import { createContext , useState, useEffect } from "react";
+import {getMe} from "./services/authApi"
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext()
@@ -7,6 +8,20 @@ export const AuthContext = createContext()
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const getAndSetUser = async() => {
+            try{
+                const response = await getMe()
+                setUser(response.data)
+            }catch(error){
+                console.log(error)
+            }finally{
+                setLoading(false)
+            }
+        }
+        getAndSetUser()
+    }, [])  
 
   
     return (

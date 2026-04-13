@@ -7,10 +7,13 @@ import { Link } from 'react-router'
 const appRoutes = createBrowserRouter([
     {
         path: "/",
-        element: <div>Home
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-        </div>,
+        element: 
+        <Protected>
+            <div>Home
+                <Link to="/login">Login</Link>
+                <Link to="/register">Register</Link>
+            </div>
+        </Protected>,
     },
     {
         path: "/login",
