@@ -23,7 +23,7 @@ export const useAuth = () => {
 
         } catch (error) {
             console.log(error)
-            return error.response.data
+            return error.response?.data || { success: false, message: error.message }
 
         } finally {
             setLoading(false)
@@ -46,7 +46,7 @@ export const useAuth = () => {
 
         } catch (error) {
             console.log(error)
-            return error.response.data
+            return error.response?.data || { success: false, message: error.message }
 
         } finally {
             setLoading(false)
@@ -69,7 +69,7 @@ export const useAuth = () => {
 
         } catch (error) {
             console.log(error)
-            return error.response.data
+            return error.response?.data || { success: false, message: error.message }
 
         } finally {
             setLoading(false)
@@ -92,7 +92,7 @@ export const useAuth = () => {
 
         } catch (error) {
             console.log(error)
-            return error.response.data
+            return error.response?.data || { success: false, message: error.message }
 
         } finally {
             setLoading(false)
