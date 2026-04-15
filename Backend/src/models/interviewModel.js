@@ -35,9 +35,13 @@ const skillGapAnalysisSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    serverity: {
+    severity: {
         type: String,
         enum: ["high", "medium", "low"],
+        required: true
+    },
+    suggestion: {
+        type: String,
         required: true
     }
 }, { _id: false })
@@ -57,6 +61,25 @@ const preparationPlanSchema = new mongoose.Schema({
             required: true
         }
     ]
+}, { _id: false })
+
+const overallFeedbackSchema = new mongoose.Schema({
+    strengths: [
+        {
+            type: String,
+            required: true
+        }
+    ],
+    areasOfImprovement: [
+        {
+            type: String,
+            required: true
+        }
+    ],
+    recommendation: {
+        type: String,
+        required: true
+    }
 }, { _id: false })
 
 const interviewReportSchema = new mongoose.Schema({
@@ -83,7 +106,9 @@ const interviewReportSchema = new mongoose.Schema({
 
     skillGapAnalysis: [skillGapAnalysisSchema],
 
-    preparationStrategy: [preparationPlanSchema]
+    preparationStrategy: [preparationPlanSchema],
+
+    overallFeedback: [overallFeedbackSchema]
 })
 
 const InterviewReportModel = mongoose.model("InterviewReport", interviewReportSchema);
