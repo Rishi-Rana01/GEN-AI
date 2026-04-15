@@ -108,7 +108,12 @@ const interviewReportSchema = new mongoose.Schema({
 
     preparationStrategy: [preparationPlanSchema],
 
-    overallFeedback: [overallFeedbackSchema]
+    overallFeedback: [overallFeedbackSchema],
+
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }
 })
 
 const InterviewReportModel = mongoose.model("InterviewReport", interviewReportSchema);
