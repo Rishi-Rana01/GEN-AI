@@ -1,6 +1,8 @@
-import pdfParse from 'pdf-parse';
-import { generateInterviewReport } from '../services/aiService';
-import InterviewReportModel from '../models/interviewModel';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pdfParse = require('pdf-parse');
+import { generateInterviewReport } from '../services/aiService.js';
+import InterviewReportModel from '../models/interviewModel.js';
 
 async function generateInterviewReportController(req, res) {
     try {
