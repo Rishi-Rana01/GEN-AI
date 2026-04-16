@@ -32,15 +32,15 @@ async function registerUserController(req, res) {
         maxAge: 24 * 60 * 60 * 1000
     })
 
-    return res.status(201).json({ message: "User created successfully", user: { id: user._id, username: user.username, email: user.email } })
+    return res.status(201).json({ success: true, message: "User created successfully", user: { id: user._id, username: user.username, email: user.email } })
 }
 
 //login user controller
 async function loginUserController(req, res) {
     const { username, email, password } = req.body
 
-    if (!username || !email || !password) {
-        return res.status(400).json({ message: "All fields are required" })
+    if (!password || (!username && !email)) {
+        return res.status(400).json({ success: false, message: "Email/Username and password are required" })
     }
 
     const isUserAlreadyExist = await userModel.findOne({
@@ -67,7 +67,7 @@ async function loginUserController(req, res) {
         maxAge: 24 * 60 * 60 * 1000
     })
 
-    return res.status(200).json({ message: "User logged in successfully", user: { id: isUserAlreadyExist._id, username: isUserAlreadyExist.username, email: isUserAlreadyExist.email } })
+    return res.status(200).json({ success: true, message: "User logged in successfully", user: { id: isUserAlreadyExist._id, username: isUserAlreadyExist.username, email: isUserAlreadyExist.email } })
 }
 
 //logout user controller
@@ -79,7 +79,7 @@ async function logoutUserController(req, res) {
     try {
         await blackListTokenModel.create({ token })
         res.clearCookie("token")
-        return res.status(200).json({ message: "User logged out successfully" })
+        return res.status(200).json({ success: true, message: "User logged out successfully" })
     } catch (error) {
         console.error("Logout error:", error)
         return res.status(500).json({ message: "Failed to logout" })
@@ -93,7 +93,7 @@ async function getMeController(req, res) {
         return res.status(400).json({ message: "User not logged in" })
     }
     try {
-        res.status(200).json({ message: "User found successfully", user: { id: user._id, username: user.username, email: user.email } })
+        res.status(200).json({ success: true, message: "User found successfully", user: { id: user._id, username: user.username, email: user.email } })
     } catch (error) {
         console.error("Get me error:", error)
         return res.status(500).json({ message: "Failed to get user" })

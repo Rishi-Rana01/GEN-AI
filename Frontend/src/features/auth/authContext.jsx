@@ -13,9 +13,14 @@ export const AuthProvider = ({children}) => {
         const getAndSetUser = async() => {
             try{
                 const response = await getMe()
-                setUser(response.data)
+                if (response?.user) {
+                    setUser(response.user)
+                } else {
+                    setUser(null)
+                }
             }catch(error){
                 console.log(error)
+                setUser(null)
             }finally{
                 setLoading(false)
             }
