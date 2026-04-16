@@ -8,7 +8,7 @@ async function generateInterviewReportController(req, res) {
         if (!resumeFile) {
             return res.status(400).json({ message: "No file uploaded" })
         }
-        const resumeContent = await pdfParse(resumeFile.buffer)
+        const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(resumeFile.buffer))).getText()
         const { jobDescription, selfDescription } = req.body
         if (!jobDescription) {
             return res.status(400).json({ message: "No job description provided" })
@@ -17,7 +17,7 @@ async function generateInterviewReportController(req, res) {
             return res.status(400).json({ message: "No self description provided" })
         }
         const interviewReportAi = await generateInterviewReport({
-            resume: resumeContent.text,
+            resumeText: resumeContent.text,
             jobDescription,
             selfDescription
         })

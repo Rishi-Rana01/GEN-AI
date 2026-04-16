@@ -93,11 +93,11 @@ async function getMeController(req, res) {
         return res.status(400).json({ message: "User not logged in" })
     }
     try {
-       res.status(200).json({ message: "User found successfully", user: { id: user._id, username: user.username, email: user.email } })
+        res.status(200).json({ message: "User found successfully", user: { id: user._id, username: user.username, email: user.email } })
     } catch (error) {
         console.error("Get me error:", error)
         return res.status(500).json({ message: "Failed to get user" })
     }
 }
 
-export default  { registerUserController, loginUserController, logoutUserController, getMeController }    
+export default { registerUserController, loginUserController, logoutUserController, getMeController } 
