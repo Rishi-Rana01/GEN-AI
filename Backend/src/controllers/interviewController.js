@@ -1,6 +1,4 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const pdfParse = require('pdf-parse');
+import { PDFParse } from 'pdf-parse';
 import { generateInterviewReport } from '../services/aiService.js';
 import InterviewReportModel from '../models/interviewModel.js';
 
@@ -10,7 +8,8 @@ async function generateInterviewReportController(req, res) {
         if (!resumeFile) {
             return res.status(400).json({ message: "No file uploaded" })
         }
-        const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(resumeFile.buffer))).getText()
+        const parser = new PDFParse({ data: Uint8Array.from(resumeFile.buffer) });
+        const resumeContent = await parser.getText();
         const { jobDescription, selfDescription } = req.body
         if (!jobDescription) {
             return res.status(400).json({ message: "No job description provided" })
@@ -29,13 +28,13 @@ async function generateInterviewReportController(req, res) {
             resumeText: resumeContent.text,
             jobDescription,
             selfDescription,
+            title: interviewReportAi.title,
             matchScore: interviewReportAi.matchScore,
             technicalQuestions: interviewReportAi.technicalQuestions,
-            behaviouralQuestions: interviewReportAi.behaviouralQuestions,
-            skillGapAnalysis: interviewReportAi.skillGapAnalysis,
+            behaviouralQuestions: interviewReportAi.behavioralQuestions,  // AI returns 'behavioral' (no 'u')
+            skillGapAnalysis: interviewReportAi.skillGaps,                // AI returns 'skillGaps'
             preparationStrategy: interviewReportAi.preparationStrategy,
-            overallFeedback: interviewReportAi.overallFeedback,
-
+            overallFeedback: interviewReportAi.overallFeedback
         })
         await interviewReport.save()
         return res.status(200).json({ message: "Interview report generated successfully", interviewReport })

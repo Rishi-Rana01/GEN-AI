@@ -1,8 +1,6 @@
+import 'dotenv/config';
 import app from "./src/app.js";
-import dotenv from "dotenv";
 import connectDB from "./src/config/database.js";
-
-dotenv.config();
 
 connectDB()
     .then(() => {
@@ -12,4 +10,4 @@ connectDB()
     })
     .catch((error) => {
         console.log("Database connection failed", error);
-    });
+    });

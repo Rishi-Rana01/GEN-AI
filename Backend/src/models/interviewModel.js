@@ -12,7 +12,13 @@ const technicalQuestionSchema = new mongoose.Schema({
     answer: {
         type: String,
         required: true
-    }
+    },
+    difficulty: {
+        type: String
+    },
+    topics: [
+        { type: String }
+    ]
 }, { _id: false })
 
 const behaviouralQuestionSchema = new mongoose.Schema({
@@ -27,7 +33,13 @@ const behaviouralQuestionSchema = new mongoose.Schema({
     answer: {
         type: String,
         required: true
-    }
+    },
+    difficulty: {
+        type: String
+    },
+    topics: [
+        { type: String }
+    ]
 }, { _id: false })
 
 const skillGapAnalysisSchema = new mongoose.Schema({
@@ -108,7 +120,7 @@ const interviewReportSchema = new mongoose.Schema({
 
     preparationStrategy: [preparationPlanSchema],
 
-    overallFeedback: [overallFeedbackSchema],
+    overallFeedback: overallFeedbackSchema,
 
     user: {
         type: mongoose.Schema.Types.ObjectId,
