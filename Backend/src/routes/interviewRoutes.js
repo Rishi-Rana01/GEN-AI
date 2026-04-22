@@ -7,5 +7,6 @@ import upload from '../middlewares/fileMiddleware.js';
 const interviewRouter = express.Router();
 
 interviewRouter.post('/generate-report', authMiddleware.authUser, upload.single('resume'), interviewController.generateInterviewReportController);
+interviewRouter.get('/report/:interviewId', authMiddleware.authUser, interviewController.getInterviewReportController);
 
 export default interviewRouter;

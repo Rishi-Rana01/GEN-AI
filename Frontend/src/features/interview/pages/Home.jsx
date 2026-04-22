@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router';
+import { generateReport } from '../services/interviewApi';
 import "../style/home.scss";
 
 // Premium Inline Icons
@@ -48,13 +50,52 @@ const AlignLeft = () => (
 );
 
 const Home = () => {
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
   const [fileName, setFileName] = useState('');
+  const [resumeFile, setResumeFile] = useState(null);
+  const [jobDescription, setJobDescription] = useState('');
+  const [selfDescription, setSelfDescription] = useState('');
+  const [experienceLevel, setExperienceLevel] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setFileName(e.target.files[0].name);
+      setResumeFile(e.target.files[0]);
     } else {
       setFileName('');
+      setResumeFile(null);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    // Basic client-side validation
+    if (!resumeFile) return setError('Please upload your resume (PDF).');
+    if (!jobDescription.trim()) return setError('Please paste the job description.');
+    if (!selfDescription.trim()) return setError('Please fill in your self description.');
+
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append('resume', resumeFile);
+      formData.append('jobDescription', jobDescription);
+      formData.append('selfDescription', selfDescription);
+      if (experienceLevel.trim()) formData.append('experienceLevel', experienceLevel);
+
+      const data = await generateReport(formData);
+      const reportId = data.interviewReport._id;
+      navigate(`/interview/${reportId}`);
+    } catch (err) {
+      console.error('Submit error:', err);
+      setError(err?.response?.data?.message || 'Failed to generate report. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,6 +126,9 @@ const Home = () => {
                 name="jobDescription" 
                 id="jobDescription" 
                 placeholder='e.g., We are looking for a Software Engineer with experience in React and Node.js...'
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                disabled={loading}
               ></textarea>
             </div>
           </div>
@@ -97,7 +141,7 @@ const Home = () => {
             </div>
             <p className="subtext">Provide your details to benchmark against the job role.</p>
 
-            <form className="form-fields">
+            <form className="form-fields" onSubmit={handleSubmit} noValidate>
               
               <div className='input-group file-upload-group'>
                 <input 
@@ -105,7 +149,9 @@ const Home = () => {
                   name="resume" 
                   id="resume" 
                   accept='.pdf'
+                  ref={fileInputRef}
                   onChange={handleFileChange}
+                  disabled={loading}
                 />
                 <label htmlFor="resume" className="file-drop-zone">
                   <div className="icon-container">
@@ -120,7 +166,15 @@ const Home = () => {
                 <label htmlFor="selfDescription">Self Description</label>
                 <div className="input-wrapper">
                   <AlignLeft />
-                  <input type="text" name="selfDescription" id="selfDescription" placeholder='Tell us about yourself...'/>
+                  <input 
+                    type="text" 
+                    name="selfDescription" 
+                    id="selfDescription" 
+                    placeholder='Tell us about yourself...'
+                    value={selfDescription}
+                    onChange={(e) => setSelfDescription(e.target.value)}
+                    disabled={loading}
+                  />
                 </div>
               </div>
 
@@ -128,14 +182,35 @@ const Home = () => {
                 <label htmlFor="experienceLevel">Experience Level</label>
                 <div className="input-wrapper">
                   <Target />
-                  <input type="text" name="experienceLevel" id="experienceLevel" placeholder='e.g., Fresher, Mid, Senior'/>
+                  <input 
+                    type="text" 
+                    name="experienceLevel" 
+                    id="experienceLevel" 
+                    placeholder='e.g., Fresher, Mid, Senior'
+                    value={experienceLevel}
+                    onChange={(e) => setExperienceLevel(e.target.value)}
+                    disabled={loading}
+                  />
                 </div>
               </div>
 
-              <button type="button" className='generate-btn'>
-                <Sparkles />
-                <span>Generate Interview Report</span>
-                <div className="btn-glow"></div>
+              {error && (
+                <p className="form-error" role="alert">{error}</p>
+              )}
+
+              <button type="submit" className='generate-btn' disabled={loading}>
+                {loading ? (
+                  <>
+                    <span className="btn-spinner" />
+                    <span>Generating Report…</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles />
+                    <span>Generate Interview Report</span>
+                    <div className="btn-glow"></div>
+                  </>
+                )}
               </button>
             </form>
 

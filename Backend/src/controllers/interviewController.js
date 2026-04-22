@@ -47,4 +47,31 @@ async function generateInterviewReportController(req, res) {
 
 }
 
-export default { generateInterviewReportController }
+async function getInterviewReportController(req, res) {
+    try {
+        const { interviewId } = req.params;
+        const report = await InterviewReportModel.findById(interviewId);
+
+        if (!report) {
+            return res.status(404).json({ message: "Interview report not found" });
+        }
+
+        // Ensure the report belongs to the requesting user
+        if (report.user.toString() !== req.user.id.toString()) {
+            return res.status(403).json({ message: "Access denied" });
+        }
+
+        return res.status(200).json({ interviewReport: report });
+    } catch (error) {
+        console.error("Get interview report error:", error);
+        return res.status(500).json({ message: "Failed to fetch interview report" });
+    }
+}
+
+// controller to get all the interview reports of logged in user.
+
+async function getAllInterviewReportController(req,res) {
+    
+}
+
+export default { generateInterviewReportController, getInterviewReportController }

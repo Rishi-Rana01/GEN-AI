@@ -110,10 +110,16 @@ const interviewReportSchema = new mongoose.Schema({
 
     overallFeedback: [overallFeedbackSchema],
 
-    user:{
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+    },
+    title: {
+        type: String,
+        required: [true, "Job title is required "]
     }
+}, {
+    timestamps: true
 })
 
 const InterviewReportModel = mongoose.model("InterviewReport", interviewReportSchema);

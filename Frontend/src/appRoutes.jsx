@@ -3,6 +3,7 @@ import Login from './features/auth/pages/Login'
 import Register from './features/auth/pages/Register'
 import Protected from './features/auth/components/Protected'
 import Home from './features/interview/pages/Home'
+import Interview from './features/interview/pages/Interview'
 
 const appRoutes = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const appRoutes = createBrowserRouter([
         path: "/register",
         element: <Register />,
     },
+    {
+        path:"/interview/:interviewId",
+        element:<Interview />
+    }
 ])
 
 export default appRoutes

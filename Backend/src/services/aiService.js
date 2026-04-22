@@ -42,6 +42,7 @@ const interviewReportSchema = z.object({
         areasOfImprovement: z.array(z.string()).describe("The areas of improvement of the candidate"),
         recommendation: z.string().describe("The recommendation for the candidate"),
     }).describe("The overall feedback for the candidate"),
+    title: z.string().describe("The title of the job for which the interview report is generated")
 });
 
 export const generateInterviewReport = async (jobDescription, resumeText, selfDescription) => {
